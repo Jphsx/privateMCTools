@@ -201,6 +201,145 @@ systematics = systematics_program ! none, systematics [python], SysCalc [deprece
 '''
     return RUNCARD
 
+
+def getRunCardUL():
+    RUNCARD='''#*********************************************************************
+#                       MadGraph5_aMC@NLO                            *
+#                                                                    *
+#                     run_card.dat MadEvent                          *
+#                                                                    *
+#  This file is used to set the parameters of the run.               *
+#                                                                    *
+#  Some notation/conventions:                                        *
+#                                                                    *
+#   Lines starting with a '# ' are info or comments                  *
+#                                                                    *
+#   mind the format:   value    = variable     ! comment             *
+#                                                                    *
+#   To display more options, you can type the command:               *
+#      update to_full                                                *
+#*********************************************************************
+#                                                                    
+#*********************************************************************
+# Tag name for the run (one word)                                    *
+#*********************************************************************
+  tag_1     = run_tag ! name of the run 
+#*********************************************************************
+# Number of events and rnd seed                                      *
+# Warning: Do not generate more than 1M events in a single run       *
+#*********************************************************************
+  10000 = nevents ! Number of unweighted events requested 
+  0   = iseed   ! rnd seed (0=assigned automatically=default))
+#*********************************************************************
+# Collider type and energy                                           *
+# lpp: 0=No PDF, 1=proton, -1=antiproton, 2=photon from proton,      *
+#                3=photon from electron, 4=photon from muon          *
+#*********************************************************************
+     1        = lpp1    ! beam 1 type 
+     1        = lpp2    ! beam 2 type
+     6500.0     = ebeam1  ! beam 1 total energy in GeV
+     6500.0     = ebeam2  ! beam 2 total energy in GeV
+# To see polarised beam options: type "update beam_pol"
+
+#*********************************************************************
+# PDF CHOICE: this automatically fixes also alpha_s and its evol.    *
+#*********************************************************************
+     lhapdf    = pdlabel     ! PDF set                                     
+     $DEFAULT_PDF_SETS    = lhaid     ! if pdlabel=lhapdf, this is the lhapdf number
+# To see heavy ion options: type "update ion_pdf"
+#*********************************************************************
+# Renormalization and factorization scales                           *
+#*********************************************************************
+ False = fixed_ren_scale  ! if .true. use fixed ren scale
+ False        = fixed_fac_scale  ! if .true. use fixed fac scale
+ 91.188  = scale            ! fixed ren scale
+ 91.188  = dsqrt_q2fact1    ! fixed fact scale for pdf1
+ 91.188  = dsqrt_q2fact2    ! fixed fact scale for pdf2
+ -1 = dynamical_scale_choice ! Choose one of the preselected dynamical choices
+ 1.0  = scalefact        ! scale factor for event-by-event scales
+#*********************************************************************
+# Type and output format
+#*********************************************************************
+  False     = gridpack  !True = setting up the grid pack
+  -1.0 = time_of_flight ! threshold (in mm) below which the invariant livetime is not written (-1 means not written)
+  average =  event_norm       ! average/sum. Normalization of the weight in the LHEF
+# To see MLM/CKKW  merging options: type "update MLM" or "update CKKW"
+
+#*********************************************************************
+#
+#*********************************************************************
+# Phase-Space Optimization strategy (basic options)
+#*********************************************************************
+   0  = nhel          ! using helicities importance sampling or not.
+                             ! 0: sum over helicity, 1: importance sampling
+   1  = sde_strategy  ! default integration strategy (hep-ph/2021.00773)
+                             ! 1 is old strategy (using amp square)
+                             ! 2 is new strategy (using only the denominator)
+# To see advanced option for Phase-Space optimization: type "update psoptim"                         
+#*********************************************************************
+# Generation bias, check the wiki page below for more information:   *
+#  'cp3.irmp.ucl.ac.be/projects/madgraph/wiki/LOEventGenerationBias' *
+#*********************************************************************
+ None = bias_module  ! Bias type of bias, [None, ptj_bias, -custom_folder-]
+ {} = bias_parameters ! Specifies the parameters of the module.
+#
+#*******************************                                                 
+# Parton level cuts definition *
+#*******************************                                     
+#                                                                    
+#
+#*********************************************************************
+# BW cutoff (M+/-bwcutoff*Gamma) ! Define on/off-shell for "$" and decay  
+#*********************************************************************
+  15.0  = bwcutoff      ! (M+/-bwcutoff*Gamma)
+#*********************************************************************
+# Standard Cuts                                                      *
+#*********************************************************************
+# Minimum and maximum pt's (for max, -1 means no cut)                *
+#*********************************************************************
+ {} = pt_min_pdg ! pt cut for other particles (use pdg code). Applied on particle and anti-particle
+ {}     = pt_max_pdg ! pt cut for other particles (syntax e.g. {6: 100, 25: 50}) 
+#
+# For display option for energy cut in the partonic center of mass frame type 'update ecut'
+#
+#*********************************************************************
+# Maximum and minimum absolute rapidity (for max, -1 means no cut)   *
+#*********************************************************************
+ {} = eta_min_pdg ! rap cut for other particles (use pdg code). Applied on particle and anti-particle
+ {} = eta_max_pdg ! rap cut for other particles (syntax e.g. {6: 2.5, 23: 5})
+#*********************************************************************
+# Minimum and maximum DeltaR distance                                *
+#*********************************************************************
+#*********************************************************************
+# Minimum and maximum invariant mass for pairs                       *
+#*********************************************************************
+ {} = mxx_min_pdg ! min invariant mass of a pair of particles X/X~ (e.g. {6:250})
+ {'default': False} = mxx_only_part_antipart ! if True the invariant mass is applied only 
+                       ! to pairs of particle/antiparticle and not to pairs of the same pdg codes.  
+#*********************************************************************
+# Inclusive cuts                                                     *
+#*********************************************************************
+ 0.0  = ptheavy   ! minimum pt for at least one heavy final state
+#*********************************************************************
+# maximal pdg code for quark to be considered as a light jet         *
+# (otherwise b cuts are applied)                                     *
+#*********************************************************************
+ 4 = maxjetflavor    ! Maximum jet pdg code
+#*********************************************************************
+#
+#*********************************************************************
+# Store info for systematics studies                                 *
+# WARNING: Do not use for interference type of computation           *
+#*********************************************************************
+   True  = use_syst      ! Enable systematics studies
+#
+systematics = systematics_program ! none, systematics [python], SysCalc [depreceted, C++]
+['--mur=0.5,1,2', '--muf=0.5,1,2', '--pdf=errorset'] = systematics_arguments ! see: https://cp3.irmp.ucl.ac.be/projects/madgraph/wiki/Systematics#Systematicspythonmodule
+# Syscalc is deprecated but to see the associate options type'update syscalc'
+~
+'''
+    return RUNCARD
+
 def getParamCard( Mgo, Mneu1, Mneu2, N2WIDTH, N2mode):
 
 
@@ -755,6 +894,87 @@ generator = cms.EDFilter("Pythia8ConcurrentHadronizerFilter",
     filterEfficiency = cms.untracked.double(1.0),
     pythiaHepMCVerbosity = cms.untracked.bool(False),
     comEnergy = cms.double(13600.),
+    PythiaParameters = cms.PSet(
+        pythia8CommonSettingsBlock,
+        pythia8CP5SettingsBlock,
+        pythia8PSweightsSettingsBlock,
+        processParameters = cms.vstring(                          
+            'JetMatching:setMad = off',
+            'JetMatching:scheme = 1',
+            'JetMatching:merge = on',
+            'JetMatching:jetAlgorithm = 2',
+            'JetMatching:etaJetMax = 5.',
+            'JetMatching:coneRadius = 1.',
+            'JetMatching:slowJetPower = 1',
+            'JetMatching:qCut = %.0f' % qcut,  #this is the actual merging scale
+            'JetMatching:nQmatch = 5', #4 corresponds to 4-flavour scheme (no matching of b-quarks), 5 for 5-flavour scheme
+            'JetMatching:nJetMax = 4', #number of partons in born matrix element for highest multiplicity
+            'JetMatching:doShowerKt = off', #off for MLM matching, turn on for shower-kT matching
+            '1000023:tau0 = {ctau_mm}',#THIS IS IN MM
+            '23:onMode=off',
+            '23:onIfAny=1 2 3 4 5 11 13 15'
+            #'TimeShower:mMaxGamma = 4.0',
+            #'BeamRemnants:primordialKThard = 2.48'
+        ),
+        parameterSets = cms.vstring('pythia8CommonSettings',
+                                    'pythia8CP5Settings',
+                                    'pythia8PSweightsSettings',
+                                    'processParameters',
+                                    )
+    ),
+    #RandomizedParameters = cms.VPSet()
+)
+'''
+
+    return FRAGMENT
+
+
+def getFragmentUL(EOS_gridpack, mglu, ctau):
+    ctau_mm = str(ctau*1000.)
+    FRAGMENT=f'''import FWCore.ParameterSet.Config as cms
+
+Nevents = 100
+externalLHEProducer = cms.EDProducer('ExternalLHEProducer',
+    args = cms.vstring('{EOS_gridpack}'),
+    nEvents = cms.untracked.uint32(Nevents),
+    numberOfParameters = cms.uint32(1),
+    outputFile = cms.string('cmsgrid_final.lhe'),
+    scriptName = cms.FileInPath('GeneratorInterface/LHEInterface/data/run_generic_tarball_xrootd.sh'),
+    generateConcurrently = cms.untracked.bool(False)
+)
+
+
+from Configuration.Generator.Pythia8CommonSettings_cfi import *
+from Configuration.Generator.MCTunesRun3ECM13p6TeV.PythiaCP5Settings_cfi import *
+from Configuration.Generator.PSweightsPythia.PythiaPSweightsSettings_cfi import *
+
+
+#params from T1qqqqVV
+def matchParams(mass):
+    if   mass<799: return 118., 0.235
+    elif mass<999: return 128., 0.235
+    elif mass<1199: return 140., 0.235
+    elif mass<1399: return 143., 0.245
+    elif mass<1499: return 147., 0.255
+    elif mass<1799: return 150., 0.267
+    elif mass<2099: return 156., 0.290 
+    elif mass<2301: return 160., 0.315 
+    elif mass<2601: return 162., 0.340
+    elif mass<2851: return 168, 0.364
+    else: return 160., 0.315
+model="T1qqqqVV"
+#mlsp=1.0
+mglu={mglu}
+qcut, tru_eff = matchParams(mglu)
+mcm_eff = 0.258 #what is this??
+wgt = Nevents*(mcm_eff/tru_eff)
+
+generator = cms.EDFilter("Pythia8ConcurrentHadronizerFilter",
+    maxEventsToPrint = cms.untracked.int32(1),
+    pythiaPylistVerbosity = cms.untracked.int32(1),
+    filterEfficiency = cms.untracked.double(1.0),
+    pythiaHepMCVerbosity = cms.untracked.bool(False),
+    comEnergy = cms.double(13000.),
     PythiaParameters = cms.PSet(
         pythia8CommonSettingsBlock,
         pythia8CP5SettingsBlock,
