@@ -62,7 +62,7 @@ pushd ../../
         --step SIM {BS}
         --nThreads 8 {BS}
         --geometry DB:Extended {BS}
-        --filein file:${{NAME}}_1.root {BS} {BS}
+        --filein file:${{NAME}}_1.root {BS}
         --era Run2_2018 {BS}
         --runUnscheduled {BS}
         --no_exec {BS}
