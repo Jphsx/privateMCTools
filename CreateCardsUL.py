@@ -45,7 +45,7 @@ def ConstructOutputName(mGo, mN2, mN1, N2ctau, mode, N2ctauStr):
 #ProcCard needs outputName
 outputName = ConstructOutputName(mGo, mN2, mN1, N2ctau, mode,N2ctauStr)
 #fragment needs gp path 
-GridPackPath='root://cmseos.fnal.gov//store/user/janguian/gridpacks/'+outputName+'_el8_amd64_gcc10_CMSSW_10_6_17_patch1_tarball.tar.xz'
+GridPackPath='root://cmseos.fnal.gov//store/user/janguian/gridpacks/'+outputName+'_slc7_amd64_gcc10_CMSSW_12_4_8_tarball.tar.xz'
 #CMSSW_10_6_17_patch1
 print("Writing Proc Card with outputName=",outputName)
 procCard = CT.getProcCard(outputName)

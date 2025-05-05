@@ -11,8 +11,8 @@ n2ctaustr='0p1'
 nevent=2000
 njob=100
 configpath='Configuration/GenProduction/python'
-cmsswbase='/uscms/home/janguian/nobackup/CMSSW_12_4_14_patch3/src'
-pdname='gogoG'
+cmsswbase='/uscms/home/janguian/nobackup/CMSSW_10_6_17_patch1/src'
+pdname='gogoG_UL18'
 
 year='UL18'
 

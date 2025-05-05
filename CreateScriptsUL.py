@@ -85,7 +85,7 @@ f.write(genScript)
 f.close()
 
 #need step SIM
-simScript = ST.CrabGEN(name,dirname,pdname)
+simScript = ST.CrabSIM(name,dirname,pdname)
 #print(simScript)
 f = open(dirname+'/crab_stepSIM.py', "w")
 f.write(simScript)
@@ -99,7 +99,7 @@ f.write(digiScript)
 f.close()
 
 #need step HLT
-hltScript = ST.CrabGEN(name,dirname,pdname)
+hltScript = ST.CrabHLT(name,dirname,pdname)
 #print(hltScript)
 f = open(dirname+'/crab_stepHLT.py', "w")
 f.write(hltScript)
